@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 :: FastJava Native DLL Compiler Script
 :: Auto-detects Visual Studio and JAVA_HOME
 
