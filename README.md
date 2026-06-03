@@ -9,8 +9,7 @@
 [![JitPack](https://jitpack.io/v/andrestubbe/fastproportion.svg)](https://jitpack.io/#andrestubbe/fastproportion)
 
 <p align="center">
-  <b>FastProportion computes CONTAIN, COVER, FIT_HORIZONTAL and FIT_VERTICAL layouts and returns pixel‑accurate viewport coordinates.</b><br>
-  <i>Tags: <code>java</code>, <code>layout</code>, <code>aspect-ratio</code>, <code>ui</code>, <code>scaler</code>, <code>graphics</code>, <code>math</code>, <code>viewport</code></i>
+  <b>FastProportion computes contain, cover, fit horizontal and fit vertical layouts and returns pixel‑accurate viewport coordinates.</b>
 </p>
 
 ```java
