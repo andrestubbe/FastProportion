@@ -3,16 +3,15 @@ package fastproportion.benchmark;
 import fastproportion.Proportion;
 import fastproportion.ProportionMode;
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 3, time = 1)
+@Measurement(iterations = 5, time = 1)
+@Fork(1)
 @State(Scope.Thread)
-@Fork(value = 1, warmups = 0)
-@Warmup(iterations = 2, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
 public class JMH_Proportion {
 
     private Proportion proportion;
@@ -24,14 +23,14 @@ public class JMH_Proportion {
     }
 
     @Benchmark
-    public void computeContain(Blackhole bh) {
-        float[] bounds = proportion.compute(ProportionMode.CONTAIN);
-        bh.consume(bounds);
+    public float[] computeContain() {
+        // Measures the throughput of the math pipeline for CONTAIN mode
+        return proportion.compute(ProportionMode.CONTAIN);
     }
 
     @Benchmark
-    public void computeCover(Blackhole bh) {
-        float[] bounds = proportion.compute(ProportionMode.COVER);
-        bh.consume(bounds);
+    public float[] computeCover() {
+        // Measures the throughput of the math pipeline for COVER mode
+        return proportion.compute(ProportionMode.COVER);
     }
 }
