@@ -1,23 +1,57 @@
-# FastProportion — High-Performance Aspect-Ratio Scaling for Java
+# FastProportion v0.1.0 [ALPHA] — High-Performance Aspect-Ratio Scaling for Java
 
-**A tiny, zero-dependency, allocation-free aspect-ratio scaling utility for Java.**
-
-[![Build](https://img.shields.io/github/actions/workflow/status/andrestubbe/fastproportion/maven.yml?branch=main)](https://github.com/andrestubbe/fastproportion/actions)
+[![Status](https://img.shields.io/badge/status-v0.1.0-brightgreen.svg)](https://github.com/andrestubbe/fastproportion/releases/tag/v0.1.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
 [![Platform](https://img.shields.io/badge/Platform-Cross%20Platform-lightgrey.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JitPack](https://jitpack.io/v/andrestubbe/fastproportion.svg)](https://jitpack.io/#andrestubbe/fastproportion)
 
-<p align="center">
-  <b>FastProportion computes contain, cover, fit horizontal and fit vertical layouts and returns pixel‑accurate viewport coordinates.</b>
-</p>
+---
+
+**⚡ A tiny, zero-dependency, allocation-free aspect-ratio scaling utility for Java.**
+
+**FastProportion** is a high-performance math library built for zero-latency layout calculations. It computes contain, cover, fit horizontal, and fit vertical layouts, returning pixel‑accurate viewport coordinates. It is designed to act as the mathematical foundation for responsive `FastJava` UIs.
+
+---
+
+## Table of Contents
+
+- [Why FastProportion?](#why-fastproportion)
+- [Quick Start](#quick-start)
+- [Features](#features)
+- [Performance Benchmarks](#performance-benchmarks)
+- [API Quick Reference](#api-quick-reference)
+- [Installation](#installation)
+- [Documentation](#documentation)
+- [Platform Support](#platform-support)
+- [License](#license)
+- [Related Projects](#related-projects)
+
+---
+
+## Why FastProportion?
+
+Standard Java layout approaches (like `GridBagLayout`, manual `Math.max` scaling in `paintComponent`, or heavy OOP abstractions) suffer from architectural flaws when dealing with high-speed rendering:
+
+- **Garbage Collection Pauses**: Creating new `Rectangle` or `Dimension` objects every frame during resizing or animation causes the GC to stall the UI thread.
+- **Double-to-Int Overhead**: Mixing `double` calculations with `int` rendering coordinates introduces constant casting overhead.
+- **State Fragility**: Hardcoding aspect-ratio math directly into UI components makes animations and transitions brittle and bug-prone.
+
+**FastProportion** solves this by strictly separating the math from the UI:
+
+- **Pure Float Pipeline**: 100% float calculations from input to output. Zero slow `double`-to-`int` casts during layout rendering.
+- **Allocation-Free Hotpath**: The `compute()` method returns a lightweight array and mutates zero global state, rendering Garbage Collection completely irrelevant during motion.
+- **Thread-Safe & Pure Math**: FastProportion only handles *proportions*, decoupling the heavy lifting from the UI thread.
+
+---
+
+## Quick Start
 
 ```java
-// Quick Start — Example
 import fastproportion.Proportion;
 import fastproportion.ProportionMode;
 
-public class Demo {
+public class Example {
     public static void main(String[] args) {
         // Container: 500x500, Content: 1920x1080
         Proportion p = new Proportion(500, 500, 1920, 1080);
@@ -35,36 +69,42 @@ public class Demo {
 }
 ```
 
-## Table of Contents
-- [Key Features](#key-features)
-- [Performance](#performance)
-- [Installation](#installation)
-- [Technical Examples & Hero Demos](#technical-examples--hero-demos)
-- [Documentation](#documentation)
-- [Platform Support](#platform-support)
-- [License](#license)
+---
+
+## Features
+
+- **⚡ High-Precision Math**: Accurate scaling using a strictly 32-bit float pipeline.
+- **📈 Seamless Transitions**: Easy to interpolate values for fluid layout animations.
+- **📦 Zero GC Pressure**: Returns primitive arrays and avoids object instantiation in the hotpath.
+- **🖇️ Ecosystem Ready**: Seamlessly integrates into any Java2D, OpenGL, or custom UI framework.
 
 ---
 
-## Key Features
--   **🚀 Float Pipeline** — 100% pure float calculations. Zero slow double-to-int casts during layout rendering.
--   **⚡ Allocation-Free Hotpath** — `compute()` returns a tiny array and mutates zero global state, making it thread-safe and extremely fast.
--   **📦 Zero Dependencies** — Just requires Java 17+. No external libraries, no native JNI code.
--   **🧩 FastJava Ready** — Built to integrate seamlessly into custom Swing/Java2D high-performance rendering pipelines.
+## Performance Benchmarks
+
+Because **FastProportion** is entirely pure math and relies on simple switch statements without allocating heavy objects, it can compute millions of layouts per second. 
+
+This makes it ideal for complex `Masonry` layouts, Video Editors, and real-time graphics where the viewport changes 60 to 144 times a second.
+
+*(JMH Benchmarks coming soon)*
 
 ---
 
-## Performance
-Because `FastProportion` is entirely pure math and relies on `switch` statements without allocating heavy objects, it can compute millions of layouts per second. This makes it ideal for complex `Masonry` layouts, Video Editors, and real-time graphics where the viewport changes 60 to 144 times a second.
+## API Quick Reference
+
+| Method                   | Description                                                                            |
+|--------------------------|----------------------------------------------------------------------------------------|
+| `new Proportion(w, h, cw, ch)` | Initializes the scaling context with container and content dimensions.                 |
+| `compute(ProportionMode)`| Returns a `float[]` array `[x, y, width, height]` scaled to the specified mode.        |
 
 ---
 
 ## Installation
 
-FastProportion is available via JitPack. 
+### Option 1: Maven (Recommended)
 
-### Option 1: Maven (JitPack)
 Add the JitPack repository and the dependency to your `pom.xml`:
+
 ```xml
 <repositories>
     <repository>
@@ -72,7 +112,6 @@ Add the JitPack repository and the dependency to your `pom.xml`:
         <url>https://jitpack.io</url>
     </repository>
 </repositories>
-
 <dependencies>
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
@@ -82,9 +121,9 @@ Add the JitPack repository and the dependency to your `pom.xml`:
 </dependencies>
 ```
 
-### Option 2: Gradle (JitPack)
-Add this to your `build.gradle` file:
-```gradle
+### Option 2: Gradle (via JitPack)
+
+```groovy
 repositories {
     maven { url 'https://jitpack.io' }
 }
@@ -94,52 +133,45 @@ dependencies {
 }
 ```
 
-### Option 3: Direct Download
-Download the latest pre-compiled JAR directly:
-📦 [**fastproportion-v0.1.0.jar**](https://github.com/andrestubbe/fastproportion/releases)
+### Option 3: Direct Download (No Build Tool)
 
----
+Download the latest JAR directly to add it to your classpath:
 
-## Technical Examples & Hero Demos
-See the `examples/` directory for the interactive visual demonstration:
-
-| Case | App | Description |
-|------|--------------|-------------------------|
-| Interactive Viewer | [Demo/Main.java](examples/Demo/src/main/java/fastproportion/demo/Main.java) | An interactive GUI showing animated, seamless transitions between `CONTAIN`, `COVER`, `FIT_HORIZONTAL`, and `FIT_VERTICAL`. |
-
-To run the visual demo locally, execute:
-```cmd
-run-demo.bat
-```
+1. 📦 **[fastproportion-v0.1.0.jar](https://github.com/andrestubbe/fastproportion/releases/download/v0.1.0/fastproportion-v0.1.0.jar)** (The Core Library)
 
 ---
 
 ## Documentation
-*   **[PHILOSOPHIE.md](docs/PHILOSOPHIE.md)**: The FastJava philosophy.
-*   **[ROADMAP.md](docs/ROADMAP.md)**: Future development and milestones.
-*   **[GITHUB_SETUP.md](docs/GITHUB_SETUP.md)**: Setup guide for contributors.
+
+* **[PHILOSOPHIE.md](docs/PHILOSOPHIE.md)**: Zero-allocation and low-overhead processing designs.
+* **[ROADMAP.md](docs/ROADMAP.md)**: Planned milestone features and performance extensions.
+* **[GITHUB_SETUP.md](docs/GITHUB_SETUP.md)**: Setup guide for contributors.
 
 ---
 
 ## Platform Support
-| Platform | Status |
-|----------|--------|
-| Windows | ✅ Fully Supported |
-| Linux | ✅ Fully Supported |
-| macOS | ✅ Fully Supported |
+
+| Platform      | Status            |
+|---------------|-------------------|
+| Windows       | ✅ Fully Supported |
+| Linux         | ✅ Fully Supported |
+| macOS         | ✅ Fully Supported |
 
 ---
 
 ## License
-MIT License — See [LICENSE](LICENSE) file for details.
+
+MIT License — See [LICENSE](LICENSE) for details.
 
 ---
 
 ## Related Projects
-- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader for Java
-- [FastTheme](https://github.com/andrestubbe/FastTheme) — Dark Mode and Theming for FastJava UIs
+
+- [FastCore](https://github.com/andrestubbe/FastCore) — Native JNI Loader and Utilities
+- [FastAnimation](https://github.com/andrestubbe/FastAnimation) — Zero overhead timeline orchestration
+- [FastTween](https://github.com/andrestubbe/FastTween) — Zero overhead pool-based tweening
+- [FastTheme](https://github.com/andrestubbe/FastTheme) — High-performance native window styling
 - [FastUI](https://github.com/andrestubbe/FastUI) — High Performance Java UI Library
-- [FastAnimation](https://github.com/andrestubbe/FastAnimation) — Java Animation Engine
 
 ---
 
