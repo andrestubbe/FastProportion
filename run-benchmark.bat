@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 chcp 65001 >nul
 setlocal
 cd /d "%~dp0"
@@ -12,6 +12,6 @@ cd examples\Benchmark
 call mvn -q clean package
 
 echo 🚀 Launching Benchmark...
-java -jar target\benchmarks.jar
+java --sun-misc-unsafe-memory-access=allow -jar target\benchmarks.jar -jvmArgsAppend "--sun-misc-unsafe-memory-access=allow"
 
 pause
