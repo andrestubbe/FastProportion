@@ -1,26 +1,37 @@
-# fastproportion — Native Windows XXX API for Java
+# FastProportion — High-Performance Aspect-Ratio Scaling for Java
 
-**High-performance native Windows XXX API for Java.**
+**A tiny, zero-dependency, allocation-free aspect-ratio scaling utility for Java.**
 
 [![Build](https://img.shields.io/github/actions/workflow/status/andrestubbe/fastproportion/maven.yml?branch=main)](https://github.com/andrestubbe/fastproportion/actions)
 [![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
-[![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
+[![Platform](https://img.shields.io/badge/Platform-Cross%20Platform-lightgrey.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JitPack](https://jitpack.io/v/andrestubbe/fastproportion.svg)](https://jitpack.io/#andrestubbe/fastproportion)
 
 <p align="center">
-  <b>FastProportion is a tiny aspect‑ratio scaling utility for Java.</b><br>
-  It computes CONTAIN, COVER, FIT_HORIZONTAL and FIT_VERTICAL layouts and returns pixel‑accurate viewport coordinates.<br><br>
+  <b>FastProportion computes CONTAIN, COVER, FIT_HORIZONTAL and FIT_VERTICAL layouts and returns pixel‑accurate viewport coordinates.</b><br>
   <i>Tags: <code>java</code>, <code>layout</code>, <code>aspect-ratio</code>, <code>ui</code>, <code>scaler</code>, <code>graphics</code>, <code>math</code>, <code>viewport</code></i>
 </p>
 
 ```java
 // Quick Start — Example
-import fastproportion.fastproportion;
+import fastproportion.Proportion;
+import fastproportion.ProportionMode;
 
 public class Demo {
     public static void main(String[] args) {
-        // Your code here
+        // Container: 500x500, Content: 1920x1080
+        Proportion p = new Proportion(500, 500, 1920, 1080);
+        
+        // Calculate the bounding box for "CONTAIN" mode
+        float[] bounds = p.compute(ProportionMode.CONTAIN);
+        
+        float x = bounds[0];
+        float y = bounds[1];
+        float w = bounds[2];
+        float h = bounds[3];
+        
+        System.out.printf("Draw image at: x=%.1f, y=%.1f, w=%.1f, h=%.1f%n", x, y, w, h);
     }
 }
 ```
@@ -28,7 +39,6 @@ public class Demo {
 ## Table of Contents
 - [Key Features](#key-features)
 - [Performance](#performance)
-- [API Quick Reference](#api-quick-reference)
 - [Installation](#installation)
 - [Technical Examples & Hero Demos](#technical-examples--hero-demos)
 - [Documentation](#documentation)
@@ -38,43 +48,24 @@ public class Demo {
 ---
 
 ## Key Features
--   **🚀 Native Performance** — Direct Win32/DirectX access via JNI.
--   **⚡ Zero Overhead** — No polling, purely event-driven callbacks.
--   **📦 Zero Dependencies** — Just requires Java 17+ and Windows.
+-   **🚀 Float Pipeline** — 100% pure float calculations. Zero slow double-to-int casts during layout rendering.
+-   **⚡ Allocation-Free Hotpath** — `compute()` returns a tiny array and mutates zero global state, making it thread-safe and extremely fast.
+-   **📦 Zero Dependencies** — Just requires Java 17+. No external libraries, no native JNI code.
+-   **🧩 FastJava Ready** — Built to integrate seamlessly into custom Swing/Java2D high-performance rendering pipelines.
 
 ---
 
 ## 📊 Performance
-fastproportion is significantly faster than standard Java alternatives:
-
-| Operation | Standard Java | fastproportion Native | Speedup |
-|-----------|---------------|----------------|---------|
-| Action A  | 50 ms         | 5 ms           | **10x** |
-| Action B  | 120 ms        | 12 ms          | **10x** |
-
----
-
-## API Quick Reference
-
-| Method | Description | Path |
-|--------|-------------|------|
-| `actionA(...)` | Brief description of action A. | [Reference →](REFERENCE.md#actiona) |
-| `actionB(...)` | Brief description of action B. | [Reference →](REFERENCE.md#actionb) |
-
-> [!TIP]
-> See **[REFERENCE.md](REFERENCE.md)** for full JNI contracts and fallback rules.
+Because `FastProportion` is entirely pure math and relies on `switch` statements without allocating heavy objects, it can compute millions of layouts per second. This makes it ideal for complex `Masonry` layouts, Video Editors, and real-time graphics where the viewport changes 60 to 144 times a second.
 
 ---
 
 ## 📥 Installation
 
-FastJava modules are available via JitPack. Depending on the module type (Pure-Java or JNI-Native), select the appropriate integration:
-
-*   **Pure-Java Modules:** Only require the main module dependency.
-*   **JNI-Native Modules:** Require **two** dependencies: the module itself and `FastCore` (the mandatory native DLL loader).
+FastProportion is available via JitPack. 
 
 ### Option 1: Maven (JitPack)
-Add the JitPack repository and the dependencies to your `pom.xml`:
+Add the JitPack repository and the dependency to your `pom.xml`:
 ```xml
 <repositories>
     <repository>
@@ -84,18 +75,10 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
 </repositories>
 
 <dependencies>
-    <!-- 1. The main Module -->
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
         <artifactId>fastproportion</artifactId>
         <version>v0.1.0</version>
-    </dependency>
-    
-    <!-- 2. FastCore (Required ONLY for JNI-Native Modules) -->
-    <dependency>
-        <groupId>com.github.andrestubbe</groupId>
-        <artifactId>fastcore</artifactId>
-        <version>v1.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -109,36 +92,32 @@ repositories {
 
 dependencies {
     implementation 'com.github.andrestubbe:fastproportion:v0.1.0'
-    implementation 'com.github.andrestubbe:fastcore:v1.0.0' // Required ONLY for JNI-Native Modules
 }
 ```
 
-### Option 3: Direct Download (No Build Tool)
-Download the latest pre-compiled JARs directly to add them to your project's classpath:
-
-1. 📦 [**fastproportion-v0.1.0.jar**](https://github.com/andrestubbe/fastproportion/releases) (The Core Library)
-2. ⚙️ [**fastcore-v1.0.0.jar**](https://github.com/andrestubbe/FastCore/releases) (The Mandatory JNI Loader — ONLY for JNI-Native Modules)
-
-> [!IMPORTANT]
-> Both JARs must be present in your classpath for fastproportion's native functions to operate correctly.
+### Option 3: Direct Download
+Download the latest pre-compiled JAR directly:
+📦 [**fastproportion-v0.1.0.jar**](https://github.com/andrestubbe/fastproportion/releases)
 
 ---
 
 ## Technical Examples & Hero Demos
-See the `examples/` directory for technical implementations and high-speed races:
+See the `examples/` directory for the interactive visual demonstration:
 
-| Case | Java Example | Performance Race / Demo | JMH Benchmark |
-|------|--------------|-------------------------|---------------|
-| Feature A | [ExampleA.java](examples/src/main/java/fastproportion/ExampleA.java) | [“Hero Demo A”](https://youtube.com) | [JMH_A.java](examples/src/main/java/fastproportion/benchmark/JMH_A.java) |
-| Feature B | [ExampleB.java](examples/src/main/java/fastproportion/ExampleB.java) | — | — |
+| Case | App | Description |
+|------|--------------|-------------------------|
+| Interactive Viewer | [Demo/Main.java](examples/Demo/src/main/java/fastproportion/demo/Main.java) | An interactive GUI showing animated, seamless transitions between `CONTAIN`, `COVER`, `FIT_HORIZONTAL`, and `FIT_VERTICAL`. |
+
+To run the visual demo locally, execute:
+```cmd
+run-demo.bat
+```
 
 ---
 
 ## Documentation
-*   **[REFERENCE.md](docs/REFERENCE.md)**: Full technical specification and API contracts.
-*   **[PHILOSOPHIE.md](docs/PHILOSOPHIE.md)**: The "Native-First" philosophy.
+*   **[PHILOSOPHIE.md](docs/PHILOSOPHIE.md)**: The FastJava philosophy.
 *   **[ROADMAP.md](docs/ROADMAP.md)**: Future development and milestones.
-*   **[COMPILE.md](docs/COMPILE.md)**: Guide to compiling the native components.
 *   **[GITHUB_SETUP.md](docs/GITHUB_SETUP.md)**: Setup guide for contributors.
 
 ---
@@ -146,9 +125,9 @@ See the `examples/` directory for technical implementations and high-speed races
 ## Platform Support
 | Platform | Status |
 |----------|--------|
-| Windows 10/11 (x64) | ✅ Fully Supported |
-| Linux | 🚧 Planned |
-| macOS | 🚧 Planned |
+| Windows | ✅ Fully Supported |
+| Linux | ✅ Fully Supported |
+| macOS | ✅ Fully Supported |
 
 ---
 
@@ -158,14 +137,11 @@ MIT License — See [LICENSE](LICENSE) file for details.
 ---
 
 ## Related Projects
-
 - [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader for Java
-- [FastAudioPlayer](https://github.com/andrestubbe/FastAudioPlayer) — Native Windows WASAPI Audio Playback for Java
-- [FastTTS](https://github.com/andrestubbe/FastTTS) — High-Performance Native Windows TTS API for Java
-- [FastSTT](https://github.com/andrestubbe/FastSTT) — Ultra-Fast Native Speech-to-Text for Java
-- [FastWakeWord](https://github.com/andrestubbe/FastWakeWord)
+- [FastTheme](https://github.com/andrestubbe/FastTheme) — Dark Mode and Theming for FastJava UIs
+- [FastUI](https://github.com/andrestubbe/FastUI) — High Performance Java UI Library
+- [FastAnimation](https://github.com/andrestubbe/FastAnimation) — Java Animation Engine
 
 ---
 
 **Part of the FastJava Ecosystem** — *Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋*
-
