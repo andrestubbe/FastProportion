@@ -77,6 +77,23 @@ public class Example {
 
 ---
 
+## Performance
+
+**FastProportion** computes layouts incredibly fast thanks to its pure float pipeline and lack of object allocations in the hotpath beyond the single array return.
+
+### JMH Benchmark Results
+
+*Measured on Windows, JDK 25.0.1. Benchmark measures throughput (operations per millisecond).*
+
+| Mode | Score (ops/ms) | Ops per Second |
+|---|---|---|
+| `CONTAIN` | ~132,215 ops/ms | > 132 Million |
+| `COVER` | ~107,472 ops/ms | > 107 Million |
+
+To run the benchmarks locally, execute `run-benchmark.bat` in the root directory.
+
+---
+
 ## API Quick Reference
 
 | Method | Description |
