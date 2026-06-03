@@ -1,9 +1,9 @@
-﻿package fastproportion;
+package fastproportion;
 
 public enum ProportionMode {
     FIT_HORIZONTAL,
     FIT_VERTICAL,
-    CONTAIN,   // contain
-    COVER         // cover
+    CONTAIN,
+    COVER    
 }
 

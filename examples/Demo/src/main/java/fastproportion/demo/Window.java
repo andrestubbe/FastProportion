@@ -1,12 +1,13 @@
-﻿package fastproportion;
+package fastproportion.demo;
+import fastproportion.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Window {
 
-    private static final int WIDTH = 565;
-    private static final int HEIGHT = 575;
+    private static final int WIDTH = 1173;
+    private static final int HEIGHT = 610;
 
     public static void setup(JFrame jframe) {
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

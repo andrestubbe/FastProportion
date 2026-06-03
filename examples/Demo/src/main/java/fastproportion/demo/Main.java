@@ -1,4 +1,5 @@
-﻿package fastproportion;
+package fastproportion.demo;
+import fastproportion.*;
 
 import fasttheme.FastTheme;
 

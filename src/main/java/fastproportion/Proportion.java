@@ -1,54 +1,48 @@
-﻿package fastproportion;
+package fastproportion;
 
 public final class Proportion {
 
-    public int x;
-    public int y;
-    public int width;
-    public int height;
-    public int contentWidth;
-    public int contentHeight;
+    public float x;
+    public float y;
+    public float width;
+    public float height;
+    public float contentWidth;
+    public float contentHeight;
 
-    public double scaledX;
-    public double scaledY;
-    public double scaledWidth;
-    public double scaledHeight;
+    // Animated outputs
+    public float animX;
+    public float animY;
+    public float animW;
+    public float animH;
 
-    public double animX, animY, animW, animH;
-
-    public Proportion(int width, int height, int contentWidth, int contentHeight) {
+    public Proportion(float width, float height, float contentWidth, float contentHeight) {
         this.width = width;
         this.height = height;
         this.contentWidth = contentWidth;
         this.contentHeight = contentHeight;
     }
 
-    public void compute(ProportionMode mode) {
-
-        double scale;
+    /**
+     * @return [scaledX, scaledY, scaledWidth, scaledHeight]
+     */
+    public float[] compute(ProportionMode mode) {
+        float scale;
 
         switch (mode) {
-            case FIT_HORIZONTAL -> scale = (double) width / contentWidth;
-            case FIT_VERTICAL -> scale = (double) height / contentHeight;
-            case CONTAIN -> // contain
-                    scale = Math.min(
-                            (double) width / contentWidth,
-                            (double) height / contentHeight
-                    );
-            case COVER -> // cover
-                    scale = Math.max(
-                            (double) width / contentWidth,
-                            (double) height / contentHeight
-                    );
-            default -> scale = 1.0;
+            case FIT_HORIZONTAL -> scale = width / contentWidth;
+            case FIT_VERTICAL -> scale = height / contentHeight;
+            case CONTAIN -> scale = Math.min(width / contentWidth, height / contentHeight);
+            case COVER -> scale = Math.max(width / contentWidth, height / contentHeight);
+            default -> scale = 1.0f;
         }
 
-        scaledWidth = contentWidth * scale;
-        scaledHeight = contentHeight * scale;
+        float scaledWidth = contentWidth * scale;
+        float scaledHeight = contentHeight * scale;
 
-        // Zentrierung
-        scaledX = x + (width - scaledWidth) * 0.5;
-        scaledY = y + (height - scaledHeight) * 0.5;
+        float scaledX = x + (width - scaledWidth) * 0.5f;
+        float scaledY = y + (height - scaledHeight) * 0.5f;
+
+        return new float[]{scaledX, scaledY, scaledWidth, scaledHeight};
     }
 }
 
