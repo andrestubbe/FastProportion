@@ -8,7 +8,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JitPack](https://jitpack.io/v/andrestubbe/fastproportion.svg)](https://jitpack.io/#andrestubbe/fastproportion)
 
-[Insert Mission Statement here: fastproportion is the high-performance substrate of the FastJava ecosystem. It provides the hand-tuned native primitives required for...]
+<p align="center">
+  <b>FastProportion is a tiny aspect‑ratio scaling utility for Java.</b><br>
+  It computes CONTAIN, COVER, FIT_HORIZONTAL and FIT_VERTICAL layouts and returns pixel‑accurate viewport coordinates.<br><br>
+  <i>Tags: <code>java</code>, <code>layout</code>, <code>aspect-ratio</code>, <code>ui</code>, <code>scaler</code>, <code>graphics</code>, <code>math</code>, <code>viewport</code></i>
+</p>
 
 ```java
 // Quick Start — Example
