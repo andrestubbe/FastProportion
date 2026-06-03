@@ -135,10 +135,11 @@ See the `examples/` directory for technical implementations and high-speed races
 ---
 
 ## Documentation
-*   **[REFERENCE.md](REFERENCE.md)**: Full technical specification and JNI contracts.
-*   **[PHILOSOPHIE.md](PHILOSOPHIE.md)**: The "Native-First" philosophy.
-*   **[CHANGELOG.md](CHANGELOG.md)**: Project history.
-*   **[ROADMAP.md](ROADMAP.md)**: Future development and milestones.
+*   **[REFERENCE.md](docs/REFERENCE.md)**: Full technical specification and API contracts.
+*   **[PHILOSOPHIE.md](docs/PHILOSOPHIE.md)**: The "Native-First" philosophy.
+*   **[ROADMAP.md](docs/ROADMAP.md)**: Future development and milestones.
+*   **[COMPILE.md](docs/COMPILE.md)**: Guide to compiling the native components.
+*   **[GITHUB_SETUP.md](docs/GITHUB_SETUP.md)**: Setup guide for contributors.
 
 ---
 
