@@ -155,7 +155,6 @@ dependencies {
 
 - **[PHILOSOPHY.md](docs/PHILOSOPHY.md)** — Design rationale and goals.
 - **[ROADMAP.md](docs/ROADMAP.md)** — Planned features and milestones.
-- **[GITHUB_SETUP.md](docs/GITHUB_SETUP.md)** — Contributor setup guide.
 
 ---
 
