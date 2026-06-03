@@ -54,12 +54,12 @@ public class Demo {
 
 ---
 
-## 📊 Performance
+## Performance
 Because `FastProportion` is entirely pure math and relies on `switch` statements without allocating heavy objects, it can compute millions of layouts per second. This makes it ideal for complex `Masonry` layouts, Video Editors, and real-time graphics where the viewport changes 60 to 144 times a second.
 
 ---
 
-## 📥 Installation
+## Installation
 
 FastProportion is available via JitPack. 
 
