@@ -85,12 +85,14 @@ public class Example {
 
 *Measured on Windows, JDK 25.0.1. Benchmark measures throughput (operations per millisecond).*
 
-| Mode | Score (ops/ms) | Ops per Second |
+| Mode | Average Time (ns/op) | Ops per Second |
 |---|---|---|
-| `CONTAIN` | ~132,215 ops/ms | > 132 Million |
-| `COVER` | ~107,472 ops/ms | > 107 Million |
+| `CONTAIN` | ~6.5 ns/op | ~150 Million |
+| `COVER` | ~6.5 ns/op | ~150 Million |
 
 To run the benchmarks locally, execute `run-benchmark.bat` in the root directory.
+
+> **Note:** These numbers reflect the zero-allocation `compute(mode, float[] out)` API which eliminates GC pressure entirely during rendering loops.
 
 ---
 

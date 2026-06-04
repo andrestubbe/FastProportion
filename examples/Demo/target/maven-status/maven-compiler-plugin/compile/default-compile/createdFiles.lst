@@ -1,11 +1,6 @@
-fastproportion\demo\Frame.class
-fastproportion\demo\Window.class
-fastproportion\demo\Canvas$1.class
-fastproportion\demo\Content.class
-fastproportion\demo\Main.class
-fastproportion\demo\AnimatedLayout.class
-fastproportion\demo\Scene.class
-fastproportion\demo\ModeSwitchAnimator.class
-fastproportion\demo\ProportionView.class
-fastproportion\demo\Icon.class
-fastproportion\demo\Canvas.class
+fastproportion\demo\Demo$3.class
+fastproportion\demo\Demo$4.class
+fastproportion\demo\Demo$5.class
+fastproportion\demo\Demo$1.class
+fastproportion\demo\Demo.class
+fastproportion\demo\Demo$2.class

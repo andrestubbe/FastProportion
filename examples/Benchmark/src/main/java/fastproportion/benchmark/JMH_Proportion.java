@@ -6,15 +6,16 @@ import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode(Mode.Throughput)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 3, time = 1)
-@Measurement(iterations = 5, time = 1)
-@Fork(1)
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Warmup(iterations = 5, time = 1)
+@Measurement(iterations = 10, time = 1)
+@Fork(3)
 @State(Scope.Thread)
 public class JMH_Proportion {
 
     private Proportion proportion;
+    private final float[] out = new float[4];
 
     @Setup(Level.Iteration)
     public void setup() {
@@ -23,14 +24,14 @@ public class JMH_Proportion {
     }
 
     @Benchmark
-    public float[] computeContain() {
-        // Measures the throughput of the math pipeline for CONTAIN mode
-        return proportion.compute(ProportionMode.CONTAIN);
+    public void computeContainZeroAllocation() {
+        // Measures the zero-allocation throughput for CONTAIN mode
+        proportion.compute(ProportionMode.CONTAIN, out);
     }
 
     @Benchmark
-    public float[] computeCover() {
-        // Measures the throughput of the math pipeline for COVER mode
-        return proportion.compute(ProportionMode.COVER);
+    public void computeCoverZeroAllocation() {
+        // Measures the zero-allocation throughput for COVER mode
+        proportion.compute(ProportionMode.COVER, out);
     }
 }

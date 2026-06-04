@@ -33,7 +33,7 @@ import org.openjdk.jmh.results.AggregationPolicy;
 import org.openjdk.jmh.runner.FailureAssistException;
 
 import fastproportion.benchmark.jmh_generated.JMH_Proportion_jmhType;
-public final class JMH_Proportion_computeContain_jmhTest {
+public final class JMH_Proportion_computeContainZeroAllocation_jmhTest {
 
     byte p000, p001, p002, p003, p004, p005, p006, p007, p008, p009, p010, p011, p012, p013, p014, p015;
     byte p016, p017, p018, p019, p020, p021, p022, p023, p024, p025, p026, p027, p028, p029, p030, p031;
@@ -58,7 +58,7 @@ public final class JMH_Proportion_computeContain_jmhTest {
     Blackhole blackhole;
     Control notifyControl;
 
-    public BenchmarkTaskResult computeContain_Throughput(InfraControl control, ThreadParams threadParams) throws Throwable {
+    public BenchmarkTaskResult computeContainZeroAllocation_Throughput(InfraControl control, ThreadParams threadParams) throws Throwable {
         this.benchmarkParams = control.benchmarkParams;
         this.iterationParams = control.iterationParams;
         this.threadParams    = threadParams;
@@ -76,18 +76,18 @@ public final class JMH_Proportion_computeContain_jmhTest {
 
             control.announceWarmupReady();
             while (control.warmupShouldWait) {
-                l_jmh_proportion0_0.computeContain(blackhole);
+                l_jmh_proportion0_0.computeContainZeroAllocation();
                 if (control.shouldYield) Thread.yield();
                 res.allOps++;
             }
 
             notifyControl.startMeasurement = true;
-            computeContain_thrpt_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, l_jmh_proportion0_0);
+            computeContainZeroAllocation_thrpt_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, l_jmh_proportion0_0);
             notifyControl.stopMeasurement = true;
             control.announceWarmdownReady();
             try {
                 while (control.warmdownShouldWait) {
-                    l_jmh_proportion0_0.computeContain(blackhole);
+                    l_jmh_proportion0_0.computeContainZeroAllocation();
                     if (control.shouldYield) Thread.yield();
                     res.allOps++;
                 }
@@ -107,19 +107,19 @@ public final class JMH_Proportion_computeContain_jmhTest {
             res.measuredOps *= opsPerInv;
             res.measuredOps /= batchSize;
             BenchmarkTaskResult results = new BenchmarkTaskResult((long)res.allOps, (long)res.measuredOps);
-            results.add(new ThroughputResult(ResultRole.PRIMARY, "computeContain", res.measuredOps, res.getTime(), benchmarkParams.getTimeUnit()));
+            results.add(new ThroughputResult(ResultRole.PRIMARY, "computeContainZeroAllocation", res.measuredOps, res.getTime(), benchmarkParams.getTimeUnit()));
             this.blackhole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.");
             return results;
         } else
             throw new IllegalStateException("Harness failed to distribute threads among groups properly");
     }
 
-    public static void computeContain_thrpt_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, JMH_Proportion_jmhType l_jmh_proportion0_0) throws Throwable {
+    public static void computeContainZeroAllocation_thrpt_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, JMH_Proportion_jmhType l_jmh_proportion0_0) throws Throwable {
         long operations = 0;
         long realTime = 0;
         result.startTime = System.nanoTime();
         do {
-            l_jmh_proportion0_0.computeContain(blackhole);
+            l_jmh_proportion0_0.computeContainZeroAllocation();
             operations++;
         } while(!control.isDone);
         result.stopTime = System.nanoTime();
@@ -128,7 +128,7 @@ public final class JMH_Proportion_computeContain_jmhTest {
     }
 
 
-    public BenchmarkTaskResult computeContain_AverageTime(InfraControl control, ThreadParams threadParams) throws Throwable {
+    public BenchmarkTaskResult computeContainZeroAllocation_AverageTime(InfraControl control, ThreadParams threadParams) throws Throwable {
         this.benchmarkParams = control.benchmarkParams;
         this.iterationParams = control.iterationParams;
         this.threadParams    = threadParams;
@@ -146,18 +146,18 @@ public final class JMH_Proportion_computeContain_jmhTest {
 
             control.announceWarmupReady();
             while (control.warmupShouldWait) {
-                l_jmh_proportion0_0.computeContain(blackhole);
+                l_jmh_proportion0_0.computeContainZeroAllocation();
                 if (control.shouldYield) Thread.yield();
                 res.allOps++;
             }
 
             notifyControl.startMeasurement = true;
-            computeContain_avgt_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, l_jmh_proportion0_0);
+            computeContainZeroAllocation_avgt_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, l_jmh_proportion0_0);
             notifyControl.stopMeasurement = true;
             control.announceWarmdownReady();
             try {
                 while (control.warmdownShouldWait) {
-                    l_jmh_proportion0_0.computeContain(blackhole);
+                    l_jmh_proportion0_0.computeContainZeroAllocation();
                     if (control.shouldYield) Thread.yield();
                     res.allOps++;
                 }
@@ -177,19 +177,19 @@ public final class JMH_Proportion_computeContain_jmhTest {
             res.measuredOps *= opsPerInv;
             res.measuredOps /= batchSize;
             BenchmarkTaskResult results = new BenchmarkTaskResult((long)res.allOps, (long)res.measuredOps);
-            results.add(new AverageTimeResult(ResultRole.PRIMARY, "computeContain", res.measuredOps, res.getTime(), benchmarkParams.getTimeUnit()));
+            results.add(new AverageTimeResult(ResultRole.PRIMARY, "computeContainZeroAllocation", res.measuredOps, res.getTime(), benchmarkParams.getTimeUnit()));
             this.blackhole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.");
             return results;
         } else
             throw new IllegalStateException("Harness failed to distribute threads among groups properly");
     }
 
-    public static void computeContain_avgt_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, JMH_Proportion_jmhType l_jmh_proportion0_0) throws Throwable {
+    public static void computeContainZeroAllocation_avgt_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, JMH_Proportion_jmhType l_jmh_proportion0_0) throws Throwable {
         long operations = 0;
         long realTime = 0;
         result.startTime = System.nanoTime();
         do {
-            l_jmh_proportion0_0.computeContain(blackhole);
+            l_jmh_proportion0_0.computeContainZeroAllocation();
             operations++;
         } while(!control.isDone);
         result.stopTime = System.nanoTime();
@@ -198,7 +198,7 @@ public final class JMH_Proportion_computeContain_jmhTest {
     }
 
 
-    public BenchmarkTaskResult computeContain_SampleTime(InfraControl control, ThreadParams threadParams) throws Throwable {
+    public BenchmarkTaskResult computeContainZeroAllocation_SampleTime(InfraControl control, ThreadParams threadParams) throws Throwable {
         this.benchmarkParams = control.benchmarkParams;
         this.iterationParams = control.iterationParams;
         this.threadParams    = threadParams;
@@ -216,7 +216,7 @@ public final class JMH_Proportion_computeContain_jmhTest {
 
             control.announceWarmupReady();
             while (control.warmupShouldWait) {
-                l_jmh_proportion0_0.computeContain(blackhole);
+                l_jmh_proportion0_0.computeContainZeroAllocation();
                 if (control.shouldYield) Thread.yield();
                 res.allOps++;
             }
@@ -226,12 +226,12 @@ public final class JMH_Proportion_computeContain_jmhTest {
             int batchSize = iterationParams.getBatchSize();
             int opsPerInv = benchmarkParams.getOpsPerInvocation();
             SampleBuffer buffer = new SampleBuffer();
-            computeContain_sample_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, buffer, targetSamples, opsPerInv, batchSize, l_jmh_proportion0_0);
+            computeContainZeroAllocation_sample_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, buffer, targetSamples, opsPerInv, batchSize, l_jmh_proportion0_0);
             notifyControl.stopMeasurement = true;
             control.announceWarmdownReady();
             try {
                 while (control.warmdownShouldWait) {
-                    l_jmh_proportion0_0.computeContain(blackhole);
+                    l_jmh_proportion0_0.computeContainZeroAllocation();
                     if (control.shouldYield) Thread.yield();
                     res.allOps++;
                 }
@@ -248,14 +248,14 @@ public final class JMH_Proportion_computeContain_jmhTest {
             res.allOps /= batchSize;
             res.measuredOps *= opsPerInv;
             BenchmarkTaskResult results = new BenchmarkTaskResult((long)res.allOps, (long)res.measuredOps);
-            results.add(new SampleTimeResult(ResultRole.PRIMARY, "computeContain", buffer, benchmarkParams.getTimeUnit()));
+            results.add(new SampleTimeResult(ResultRole.PRIMARY, "computeContainZeroAllocation", buffer, benchmarkParams.getTimeUnit()));
             this.blackhole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.");
             return results;
         } else
             throw new IllegalStateException("Harness failed to distribute threads among groups properly");
     }
 
-    public static void computeContain_sample_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, SampleBuffer buffer, int targetSamples, long opsPerInv, int batchSize, JMH_Proportion_jmhType l_jmh_proportion0_0) throws Throwable {
+    public static void computeContainZeroAllocation_sample_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, SampleBuffer buffer, int targetSamples, long opsPerInv, int batchSize, JMH_Proportion_jmhType l_jmh_proportion0_0) throws Throwable {
         long realTime = 0;
         long operations = 0;
         int rnd = (int)System.nanoTime();
@@ -270,7 +270,7 @@ public final class JMH_Proportion_computeContain_jmhTest {
             }
             for (int b = 0; b < batchSize; b++) {
                 if (control.volatileSpoiler) return;
-                l_jmh_proportion0_0.computeContain(blackhole);
+                l_jmh_proportion0_0.computeContainZeroAllocation();
             }
             if (sample) {
                 buffer.add((System.nanoTime() - time) / opsPerInv);
@@ -288,7 +288,7 @@ public final class JMH_Proportion_computeContain_jmhTest {
     }
 
 
-    public BenchmarkTaskResult computeContain_SingleShotTime(InfraControl control, ThreadParams threadParams) throws Throwable {
+    public BenchmarkTaskResult computeContainZeroAllocation_SingleShotTime(InfraControl control, ThreadParams threadParams) throws Throwable {
         this.benchmarkParams = control.benchmarkParams;
         this.iterationParams = control.iterationParams;
         this.threadParams    = threadParams;
@@ -306,7 +306,7 @@ public final class JMH_Proportion_computeContain_jmhTest {
             notifyControl.startMeasurement = true;
             RawResults res = new RawResults();
             int batchSize = iterationParams.getBatchSize();
-            computeContain_ss_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, batchSize, l_jmh_proportion0_0);
+            computeContainZeroAllocation_ss_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, batchSize, l_jmh_proportion0_0);
             control.preTearDown();
 
             if (control.isLastIteration()) {
@@ -315,19 +315,19 @@ public final class JMH_Proportion_computeContain_jmhTest {
             int opsPerInv = control.benchmarkParams.getOpsPerInvocation();
             long totalOps = opsPerInv;
             BenchmarkTaskResult results = new BenchmarkTaskResult(totalOps, totalOps);
-            results.add(new SingleShotResult(ResultRole.PRIMARY, "computeContain", res.getTime(), totalOps, benchmarkParams.getTimeUnit()));
+            results.add(new SingleShotResult(ResultRole.PRIMARY, "computeContainZeroAllocation", res.getTime(), totalOps, benchmarkParams.getTimeUnit()));
             this.blackhole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.");
             return results;
         } else
             throw new IllegalStateException("Harness failed to distribute threads among groups properly");
     }
 
-    public static void computeContain_ss_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, int batchSize, JMH_Proportion_jmhType l_jmh_proportion0_0) throws Throwable {
+    public static void computeContainZeroAllocation_ss_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, int batchSize, JMH_Proportion_jmhType l_jmh_proportion0_0) throws Throwable {
         long realTime = 0;
         result.startTime = System.nanoTime();
         for (int b = 0; b < batchSize; b++) {
             if (control.volatileSpoiler) return;
-            l_jmh_proportion0_0.computeContain(blackhole);
+            l_jmh_proportion0_0.computeContainZeroAllocation();
         }
         result.stopTime = System.nanoTime();
         result.realTime = realTime;

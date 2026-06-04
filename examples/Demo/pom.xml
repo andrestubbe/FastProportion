@@ -78,7 +78,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>fastproportion.demo.Main</mainClass>
+                    <mainClass>fastproportion.demo.Demo</mainClass>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
             </plugin>
