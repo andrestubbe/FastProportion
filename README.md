@@ -12,6 +12,8 @@
 
 **FastProportion** is a lightweight math library for pixel-accurate layout calculations. It computes contain, cover, fit-horizontal, and fit-vertical scaling modes, returning the resulting viewport coordinates as a `float[]`. Designed as the mathematical foundation for responsive FastJava UIs.
 
+![FastProportion Showcase](docs/screenshot.png)
+
 ---
 
 ## Table of Contents
