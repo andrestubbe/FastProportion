@@ -1,0 +1,30 @@
+================================================================================
+YOUTUBE RELEASE TEMPLATE: FastProportion
+================================================================================
+
+TITLE:
+150 Million Ops/Sec: Zero-Allocation Layout Math in Java | FastProportion 🚀
+
+DESCRIPTION:
+FastProportion is a lightweight, zero-dependency math library for pixel-accurate layout calculations in Java. Designed as the mathematical foundation for responsive FastJava UIs, it effortlessly handles contain, cover, and fit scaling operations while running at an absurd 150 million operations per second!
+
+KEY HIGHLIGHTS:
+- Zero-Allocation Hotpath: Completely eliminates garbage collection pressure during animations with the new `compute(mode, out[])` API.
+- Sub-Pixel Accuracy: A pure 32-bit float pipeline avoids the classic integer truncation glitches of standard Math.min/Math.max Java layout engines.
+- Framework Agnostic: Clean separation of math and rendering. Use it with Java2D, FastUI, OpenGL, or any other engine.
+
+RESULTS (JMH Benchmark on JDK 25):
+- CONTAIN Mode: ~6.5 ns/op
+- COVER Mode: ~6.4 ns/op
+- Throughput: ~150,000,000 operations per second
+
+LINKS:
+GitHub: https://github.com/andrestubbe/FastProportion
+FastJava Ecosystem: https://github.com/andrestubbe/FastJava
+
+Part of the FastJava Ecosystem — Making the JVM faster.
+
+Made with ⚡ by Andre Stubbe
+
+TAGS:
+Java, Performance, Layout, Rendering, Math, FastJava, Zero Allocation, JMH, Optimization, FastUI
