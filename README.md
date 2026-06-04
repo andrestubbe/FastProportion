@@ -11,8 +11,9 @@
 **⚡ A tiny, zero-dependency aspect-ratio scaling utility for Java.**
 
 **FastProportion** is a lightweight math library for pixel-accurate layout calculations. It computes contain, cover, fit-horizontal, and fit-vertical scaling modes, returning the resulting viewport coordinates as a `float[]`. Designed as the mathematical foundation for responsive FastJava UIs.
+[**Watch the Demo**](https://www.youtube.com/watch?v=O_HeJDIgO-s)
 
-![FastProportion Showcase](docs/screenshot.png)
+[![FastProportion Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=O_HeJDIgO-s)
 
 ---
 
