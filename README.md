@@ -77,7 +77,7 @@ public class Example {
 
 ---
 
-## ⚡ Zero‑Allocation API
+## Zero-Allocation API
 
 FastProportion provides two compute methods:
 
@@ -100,7 +100,7 @@ The zero‑allocation version avoids creating new arrays and is ideal for:
 
 ---
 
-## 🚀 Performance (JMH, JDK 25)
+## Performance (JMH, JDK 25)
 
 Using the zero‑allocation API:
 
@@ -121,7 +121,7 @@ Measured with:
 
 FastProportion is effectively free in any real‑time rendering pipeline.
 
-### 📊 Benchmark Code (included in `/examples/Benchmark`)
+### Benchmark Code (included in `/examples/Benchmark`)
 ```java
 @Benchmark
 @CompilerControl(CompilerControl.Mode.DONT_INLINE)
