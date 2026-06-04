@@ -18,6 +18,17 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+/**
+ * A highly optimized, single-file visual demonstration of FastProportion integrated with FastUI.
+ * <p>
+ * This class showcases:
+ * <ul>
+ *     <li>Zero-allocation layout updates during drag and resize interactions.</li>
+ *     <li>Smooth interpolation between ProportionModes via FastTween.</li>
+ *     <li>Proper z-index layering and bounds clipping via FastUI Component composition.</li>
+ *     <li>Native window styling via FastTheme (dark mode, glass transparency).</li>
+ * </ul>
+ */
 public class Demo extends JFrame {
 
     public static void main(String[] args) {
@@ -70,7 +81,11 @@ public class Demo extends JFrame {
         FastAnimation.setHeartbeatMode(HeartbeatMode.JAVA);
         root.setBackground(Color.BLACK);
 
-        // 1. Frame Component
+        // ==========================================
+        // UI COMPONENTS HIERARCHY
+        // ==========================================
+
+        // 1. Frame Component (The gray boundary box)
         Component frame = new Component() {
             @Override
             public void onRender(Graphics2D g) {
@@ -79,7 +94,7 @@ public class Demo extends JFrame {
             }
         };
 
-        // 2. Content Component
+        // 2. Content Component (The white inner area with the cross)
         Component content = new Component() {
             @Override
             public void onRender(Graphics2D g) {
@@ -93,7 +108,9 @@ public class Demo extends JFrame {
             }
         };
 
-        // 3. View Container (syncs bounds & clipping)
+        // 3. View Container (The root anchor for Frame and Content)
+        // This component syncs the absolute bounds before FastUI renders its children.
+        // It uses a ClipContainer to ensure the Content never overflows the Frame visually.
         ClipContainer clip = new ClipContainer();
         clip.add(content);
         
@@ -113,7 +130,9 @@ public class Demo extends JFrame {
         view.add(clip);
         root.add(view);
 
-        // 4. Handles
+        // 4. Handles (Draggable circular buttons)
+        // These utilize FastUI's ImageSwappable and BehaviorButton3x3 logic for 
+        // extremely fast visual state transitions (hover/press) without memory leaks.
         BufferedImage imgBase = createCircle(12, new Color(100, 100, 100, 200));
         BufferedImage imgHover = createCircle(12, new Color(150, 150, 150, 255));
         BufferedImage imgPressed = createCircle(12, new Color(255, 255, 255, 255));
@@ -149,7 +168,9 @@ public class Demo extends JFrame {
         handlesLayer.add(resizeBtn);
         root.add(handlesLayer);
 
-        // 5. Keyboard Controls
+        // 5. Keyboard Controls (Mode switching)
+        // Pressing 1,2,3,4 triggers a 300ms FastTween animation that linearly interpolates
+        // the Proportion scaling bounds into the new mode.
         root.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
