@@ -9,11 +9,13 @@ public class Content extends Component {
 
     @Override
     public void onRender(Graphics2D g) {
+        int ax = (int)getAbsoluteX();
+        int ay = (int)getAbsoluteY();
         g.setColor(Color.WHITE);
-        g.fillRect((int)x, (int)y, (int)width, (int)height);
+        g.fillRect(ax, ay, (int)width, (int)height);
         
         g.setColor(Color.BLACK);
-        g.drawLine((int)x, (int)y, (int)(x + width), (int)(y + height));
-        g.drawLine((int)(x + width), (int)y, (int)x, (int)(y + height));
+        g.drawLine(ax, ay, ax + (int)width, ay + (int)height);
+        g.drawLine(ax + (int)width, ay, ax, ay + (int)height);
     }
 }

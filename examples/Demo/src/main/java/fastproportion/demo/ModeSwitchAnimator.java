@@ -11,11 +11,14 @@ import java.util.List;
 
 public class ModeSwitchAnimator {
 
-    private final List<Proportion> proportions;
+    private final List<AnimatedLayout> layouts;
     private final Runnable repaintCallback;
 
-    public ModeSwitchAnimator(List<Proportion> proportions, Runnable repaintCallback) {
-        this.proportions = proportions;
+    private final float[] tempFrom = new float[4];
+    private final float[] tempTo = new float[4];
+
+    public ModeSwitchAnimator(List<AnimatedLayout> layouts, Runnable repaintCallback) {
+        this.layouts = layouts;
         this.repaintCallback = repaintCallback;
 
         FastAnimation.setHeartbeatMode(HeartbeatMode.JAVA);
@@ -36,23 +39,22 @@ public class ModeSwitchAnimator {
     }
 
     private void updateProgress(float t, ProportionMode from, ProportionMode to) {
-        for (Proportion p : proportions) {
+        for (AnimatedLayout layout : layouts) {
             // CURRENT
-            float[] c = p.compute(from);
-            float cx = c[0], cy = c[1], cw = c[2], ch = c[3];
+            layout.p.compute(from, tempFrom);
+            float cx = tempFrom[0], cy = tempFrom[1], cw = tempFrom[2], ch = tempFrom[3];
 
             // TARGET
-            float[] tg = p.compute(to);
-            float tx = tg[0], ty = tg[1], tw = tg[2], th = tg[3];
+            layout.p.compute(to, tempTo);
+            float tx = tempTo[0], ty = tempTo[1], tw = tempTo[2], th = tempTo[3];
 
             // LINEAR INTERPOLATION
-            p.animX = cx + (tx - cx) * t;
-            p.animY = cy + (ty - cy) * t;
-            p.animW = cw + (tw - cw) * t;
-            p.animH = ch + (th - ch) * t;
+            layout.animX = cx + (tx - cx) * t;
+            layout.animY = cy + (ty - cy) * t;
+            layout.animW = cw + (tw - cw) * t;
+            layout.animH = ch + (th - ch) * t;
         }
 
         repaintCallback.run();
     }
 }
-

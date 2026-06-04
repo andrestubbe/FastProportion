@@ -10,7 +10,6 @@ public final class Proportion {
     public float contentHeight;
 
 
-
     public Proportion(float width, float height, float contentWidth, float contentHeight) {
         this.width = width;
         this.height = height;
@@ -43,8 +42,9 @@ public final class Proportion {
 
     /**
      * Zero-allocation calculation. Writes the resulting coordinates into the provided array.
+     *
      * @param mode The scaling mode to use
-     * @param out A float array of at least length 4. Will be populated with [x, y, width, height]
+     * @param out  A float array of at least length 4. Will be populated with [x, y, width, height]
      */
     public void compute(ProportionMode mode, float[] out) {
         float scale;

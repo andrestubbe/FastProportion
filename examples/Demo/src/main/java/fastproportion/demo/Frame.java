@@ -12,6 +12,6 @@ public class Frame extends Component {
     @Override
     public void onRender(Graphics2D g) {
         g.setColor(COLOR);
-        g.fillRect((int)x, (int)y, (int)width, (int)height);
+        g.fillRect((int)getAbsoluteX(), (int)getAbsoluteY(), (int)width, (int)height);
     }
 }

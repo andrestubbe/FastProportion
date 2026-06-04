@@ -4,7 +4,6 @@ import fastproportion.*;
 import fastui.InteractionManager;
 import fastui.behaviour.BehaviourDragMove;
 import fastui.component.Component;
-import fastui.util.Clipping;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,7 @@ import java.util.List;
 public class Canvas extends JPanel {
 
     private final Scene scene;
-    private final List<Proportion> proportions;
+    private final List<AnimatedLayout> layouts;
     private final ModeSwitchAnimator modeAnimator;
     
     private final List<Component> uiElements = new ArrayList<>();
@@ -24,34 +23,54 @@ public class Canvas extends JPanel {
     private ProportionMode currentMode = ProportionMode.CONTAIN;
     private ProportionMode targetMode = ProportionMode.CONTAIN;
 
-    private final Frame sharedFrame = new Frame();
-    private final Content sharedContent = new Content();
+    private final List<ProportionView> proportionViews = new ArrayList<>();
 
-    public Canvas(Scene scene, List<Proportion> proportions) {
+    private java.awt.image.BufferedImage createCircle(int size, Color color) {
+        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(size, size, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(color);
+        g.fillOval(0, 0, size, size);
+        g.dispose();
+        return img;
+    }
+
+    public Canvas(Scene scene, List<AnimatedLayout> layouts) {
         this.scene = scene;
-        this.proportions = proportions;
+        this.layouts = layouts;
 
-        this.modeAnimator = new ModeSwitchAnimator(proportions, this::repaint);
-        
-        for (Proportion p : proportions) {
-            p.x = scene.x;
-            p.y = scene.y;
-            MoveHandle mh = new MoveHandle(p);
-            mh.addBehavior(new BehaviourDragMove((dx, dy) -> {
+        this.modeAnimator = new ModeSwitchAnimator(layouts, this::repaint);
+
+        java.awt.image.BufferedImage imgBase = createCircle(12, new Color(100, 100, 100, 200));
+        java.awt.image.BufferedImage imgHover = createCircle(12, new Color(150, 150, 150, 255));
+        java.awt.image.BufferedImage imgPressed = createCircle(12, new Color(255, 255, 255, 255));
+
+        for (AnimatedLayout layout : layouts) {
+            layout.p.x = scene.x;
+            layout.p.y = scene.y;
+            
+            layout.moveBtn = new fastui.component.Image(imgBase);
+            layout.moveBtn.addBehavior(new fastui.behaviour.BehaviorButton3x3(imgBase, imgHover, imgPressed));
+            layout.moveBtn.addBehavior(new BehaviourDragMove((dx, dy) -> {
                 scene.x += dx;
                 scene.y += dy;
-                modeAnimator.init(currentMode);
+                modeAnimator.init(targetMode);
             }));
             
-            ResizeHandle rh = new ResizeHandle(p);
-            rh.addBehavior(new BehaviourDragMove((dx, dy) -> {
-                p.width = Math.max(50, p.width + dx);
-                p.height = Math.max(50, p.height + dy);
-                modeAnimator.init(currentMode);
+            layout.resizeBtn = new fastui.component.Image(imgBase);
+            layout.resizeBtn.addBehavior(new fastui.behaviour.BehaviorButton3x3(imgBase, imgHover, imgPressed));
+            layout.resizeBtn.addBehavior(new BehaviourDragMove((dx, dy) -> {
+                layout.p.width = Math.max(50, layout.p.width + dx);
+                layout.p.height = Math.max(50, layout.p.height + dy);
+                modeAnimator.init(targetMode);
             }));
             
-            uiElements.add(mh);
-            uiElements.add(rh);
+            ProportionView view = new ProportionView(layout, scene);
+            proportionViews.add(view);
+            
+            uiElements.add(view);
+            uiElements.add(layout.moveBtn);
+            uiElements.add(layout.resizeBtn);
         }
         
         this.interactionManager = new InteractionManager(this, uiElements);
@@ -105,20 +124,8 @@ public class Canvas extends JPanel {
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        for (Proportion p : proportions) {
-            p.x = scene.x;
-            p.y = scene.y;
-
-            sharedFrame.setBounds(p.x, p.y, p.width, p.height);
-            sharedFrame.render(g2);
-
-            Shape oldClip = Clipping.push(g2);
-            Clipping.clip(g2, p.x, p.y, p.width, p.height);
-            
-            sharedContent.setBounds(p.animX, p.animY, p.animW, p.animH);
-            sharedContent.render(g2);
-            
-            Clipping.pop(g2, oldClip);
+        for (AnimatedLayout layout : layouts) {
+            // Note: Bounds syncing for Frame and Content is now done entirely inside ProportionView.onRender()
         }
         
         for (Component c : uiElements) {

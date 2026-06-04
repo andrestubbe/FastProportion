@@ -32,14 +32,13 @@ public class Main extends JFrame {
         scene.x = 25;
         scene.y = 25;
 
-        List<Proportion> proportions = new ArrayList<>();
-        proportions.add(new Proportion(500, 500, 1000, 2134));
+        List<AnimatedLayout> layouts = new ArrayList<>();
+        layouts.add(new AnimatedLayout(new Proportion(500, 500, 1000, 2134)));
 
-        Canvas canvas = new Canvas(scene, proportions);
+        Canvas canvas = new Canvas(scene, layouts);
         setContentPane(canvas);
 
         setVisible(true);
         SwingUtilities.invokeLater(canvas::requestFocusInWindow);
     }
 }
-
