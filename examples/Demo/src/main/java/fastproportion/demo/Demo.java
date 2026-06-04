@@ -50,13 +50,11 @@ public class Demo extends JFrame {
     private static final int ANIMATION_DURATION_MS = 300;
 
     private static final Color COLOR_BG = Color.BLACK;
-    private static final Color COLOR_FRAME = new Color(32, 32, 32);
+    private static final Color COLOR_FRAME = new Color(4, 4, 4);
     private static final Color COLOR_CONTENT_BG = Color.WHITE;
     private static final Color COLOR_CONTENT_LINES = Color.BLACK;
 
-    private static final Color COLOR_HANDLE_BASE = new Color(100, 100, 100, 200);
-    private static final Color COLOR_HANDLE_HOVER = new Color(150, 150, 150, 255);
-    private static final Color COLOR_HANDLE_PRESSED = new Color(255, 255, 255, 255);
+
 
     public static void main(String[] args) {
         System.setProperty("sun.java2d.uiScale", "1.0");
@@ -179,9 +177,9 @@ public class Demo extends JFrame {
         // 4. Handles (Draggable circular buttons)
         // These utilize FastUI's ImageSwappable and BehaviorButton3x3 logic for 
         // extremely fast visual state transitions (hover/press) without memory leaks.
-        BufferedImage imgBase = createCircle(HANDLE_SIZE, COLOR_HANDLE_BASE);
-        BufferedImage imgHover = createCircle(HANDLE_SIZE, COLOR_HANDLE_HOVER);
-        BufferedImage imgPressed = createCircle(HANDLE_SIZE, COLOR_HANDLE_PRESSED);
+        BufferedImage imgBase = createHandleImage(HANDLE_SIZE, false, 0, true);
+        BufferedImage imgHover = createHandleImage(HANDLE_SIZE, true, 127, true);
+        BufferedImage imgPressed = createHandleImage(HANDLE_SIZE, true, 255, true);
 
         Image moveBtn = new Image(imgBase);
         moveBtn.addBehavior(new fastui.behaviour.BehaviorButton3x3(imgBase, imgHover, imgPressed));
@@ -273,12 +271,21 @@ public class Demo extends JFrame {
         root.repaint();
     }
 
-    private BufferedImage createCircle(int size, Color color) {
+    private BufferedImage createHandleImage(int size, boolean fill, int fillAlpha, boolean border) {
         BufferedImage img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setColor(color);
-        g.fillOval(0, 0, size, size);
+        
+        if (fill) {
+            g.setColor(new Color(255, 255, 255, fillAlpha));
+            g.fillOval(1, 1, size - 2, size - 2);
+        }
+        if (border) {
+            g.setColor(Color.WHITE);
+            g.setStroke(new BasicStroke(1.5f));
+            g.drawOval(1, 1, size - 3, size - 3);
+        }
+        
         g.dispose();
         return img;
     }
