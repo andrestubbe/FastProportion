@@ -31,6 +31,33 @@ import java.awt.image.BufferedImage;
  */
 public class Demo extends JFrame {
 
+    private static final int WINDOW_WIDTH = 1173;
+    private static final int WINDOW_HEIGHT = 610;
+    private static final int WINDOW_OPACITY = 224;
+
+    private static final int START_WIDTH = 500;
+    private static final int START_HEIGHT = 500;
+    private static final int CONTENT_WIDTH = 1000;
+    private static final int CONTENT_HEIGHT = 2134;
+    private static final int MIN_SIZE = 50;
+
+    private static final int ICON_SIZE = 64;
+    private static final int ICON_OFFSET = 4;
+    private static final int ICON_DRAW_SIZE = 56;
+
+    private static final int HANDLE_SIZE = 12;
+    private static final int HANDLE_OFFSET = HANDLE_SIZE / 2;
+    private static final int ANIMATION_DURATION_MS = 300;
+
+    private static final Color COLOR_BG = Color.BLACK;
+    private static final Color COLOR_FRAME = new Color(32, 32, 32);
+    private static final Color COLOR_CONTENT_BG = Color.WHITE;
+    private static final Color COLOR_CONTENT_LINES = Color.BLACK;
+
+    private static final Color COLOR_HANDLE_BASE = new Color(100, 100, 100, 200);
+    private static final Color COLOR_HANDLE_HOVER = new Color(150, 150, 150, 255);
+    private static final Color COLOR_HANDLE_PRESSED = new Color(255, 255, 255, 255);
+
     public static void main(String[] args) {
         System.setProperty("sun.java2d.uiScale", "1.0");
         System.setProperty("sun.java2d.opengl", "true");
@@ -39,7 +66,7 @@ public class Demo extends JFrame {
         SwingUtilities.invokeLater(Demo::new);
     }
 
-    private final Proportion p = new Proportion(500, 500, 1000, 2134);
+    private final Proportion p = new Proportion(START_WIDTH, START_HEIGHT, CONTENT_WIDTH, CONTENT_HEIGHT);
     private float animX, animY, animW, animH;
     
     private ProportionMode currentMode = ProportionMode.CONTAIN;
@@ -54,16 +81,16 @@ public class Demo extends JFrame {
         
         // Setup Window
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1173, 610);
+        this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setLocationRelativeTo(null);
-        this.setBackground(Color.BLACK);
+        this.setBackground(COLOR_BG);
         
         // Setup Icon
-        BufferedImage icon = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage icon = new BufferedImage(ICON_SIZE, ICON_SIZE, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gi = icon.createGraphics();
         gi.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gi.setColor(Color.WHITE);
-        gi.fillOval(4, 4, 56, 56);
+        gi.fillOval(ICON_OFFSET, ICON_OFFSET, ICON_DRAW_SIZE, ICON_DRAW_SIZE);
         gi.dispose();
         this.setIconImage(icon);
 
@@ -72,14 +99,15 @@ public class Demo extends JFrame {
         if (hwnd != 0) {
             FastTheme.setTitleBarColor(hwnd, 0, 0, 0);
             FastTheme.setTitleBarTextColor(hwnd, 255, 255, 255);
-            FastTheme.setWindowTransparency(hwnd, 224);
+            FastTheme.setWindowTransparency(hwnd, WINDOW_OPACITY);
         }
 
+        // Initial fallback position
         p.x = 336;
         p.y = 55;
 
         FastAnimation.setHeartbeatMode(HeartbeatMode.JAVA);
-        root.setBackground(Color.BLACK);
+        root.setBackground(COLOR_BG);
 
         // ==========================================
         // UI COMPONENTS HIERARCHY
@@ -89,7 +117,7 @@ public class Demo extends JFrame {
         Component frame = new Component() {
             @Override
             public void onRender(Graphics2D g) {
-                g.setColor(new Color(32, 32, 32));
+                g.setColor(COLOR_FRAME);
                 g.fillRect((int)getAbsoluteX(), (int)getAbsoluteY(), (int)getWidth(), (int)getHeight());
             }
         };
@@ -100,9 +128,9 @@ public class Demo extends JFrame {
             public void onRender(Graphics2D g) {
                 int ax = (int)getAbsoluteX(), ay = (int)getAbsoluteY();
                 int w = (int)getWidth(), h = (int)getHeight();
-                g.setColor(Color.WHITE);
+                g.setColor(COLOR_CONTENT_BG);
                 g.fillRect(ax, ay, w, h);
-                g.setColor(Color.BLACK);
+                g.setColor(COLOR_CONTENT_LINES);
                 g.drawLine(ax, ay, ax + w, ay + h);
                 g.drawLine(ax + w, ay, ax, ay + h);
             }
@@ -133,9 +161,9 @@ public class Demo extends JFrame {
         // 4. Handles (Draggable circular buttons)
         // These utilize FastUI's ImageSwappable and BehaviorButton3x3 logic for 
         // extremely fast visual state transitions (hover/press) without memory leaks.
-        BufferedImage imgBase = createCircle(12, new Color(100, 100, 100, 200));
-        BufferedImage imgHover = createCircle(12, new Color(150, 150, 150, 255));
-        BufferedImage imgPressed = createCircle(12, new Color(255, 255, 255, 255));
+        BufferedImage imgBase = createCircle(HANDLE_SIZE, COLOR_HANDLE_BASE);
+        BufferedImage imgHover = createCircle(HANDLE_SIZE, COLOR_HANDLE_HOVER);
+        BufferedImage imgPressed = createCircle(HANDLE_SIZE, COLOR_HANDLE_PRESSED);
 
         Image moveBtn = new Image(imgBase);
         moveBtn.addBehavior(new fastui.behaviour.BehaviorButton3x3(imgBase, imgHover, imgPressed));
@@ -148,16 +176,16 @@ public class Demo extends JFrame {
         Image resizeBtn = new Image(imgBase);
         resizeBtn.addBehavior(new fastui.behaviour.BehaviorButton3x3(imgBase, imgHover, imgPressed));
         resizeBtn.addBehavior(new BehaviourDragMove((dx, dy) -> {
-            p.width = Math.max(50, p.width + dx);
-            p.height = Math.max(50, p.height + dy);
+            p.width = Math.max(MIN_SIZE, p.width + dx);
+            p.height = Math.max(MIN_SIZE, p.height + dy);
             switchMode(targetMode);
         }));
 
         Component handlesLayer = new Component() {
             @Override
             public void onRender(Graphics2D g) {
-                moveBtn.setBounds(p.x - 6, p.y - 6, 12, 12);
-                resizeBtn.setBounds(p.x + p.width - 6, p.y + p.height - 6, 12, 12);
+                moveBtn.setBounds(p.x - HANDLE_OFFSET, p.y - HANDLE_OFFSET, HANDLE_SIZE, HANDLE_SIZE);
+                resizeBtn.setBounds(p.x + p.width - HANDLE_OFFSET, p.y + p.height - HANDLE_OFFSET, HANDLE_SIZE, HANDLE_SIZE);
             }
             @Override
             public boolean contains(float mx, float my) {
@@ -192,7 +220,14 @@ public class Demo extends JFrame {
         switchMode(currentMode);
         setContentPane(root);
         setVisible(true);
-        SwingUtilities.invokeLater(root::requestFocusInWindow);
+        
+        // Dynamically center the content based on true window metrics after layout
+        SwingUtilities.invokeLater(() -> {
+            p.x = (root.getWidth() - p.width) / 2f;
+            p.y = (root.getHeight() - p.height) / 2f;
+            switchMode(currentMode);
+            root.requestFocusInWindow();
+        });
     }
 
     private void switchMode(ProportionMode target) {
@@ -202,7 +237,7 @@ public class Demo extends JFrame {
     private void animateMode(ProportionMode from, ProportionMode to) {
         updateProgress(0f, from, to);
         FastAnimation.parallel(
-            FastTween.to(0f, 1f, 300)
+            FastTween.to(0f, 1f, ANIMATION_DURATION_MS)
                 .ease(Ease.LINEAR)
                 .onUpdate(t -> updateProgress(t, from, to))
         ).start();
