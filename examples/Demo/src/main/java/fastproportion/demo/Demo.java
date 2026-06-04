@@ -75,6 +75,7 @@ public class Demo extends JFrame {
     private final fastui.Container root = new fastui.Container();
     private final float[] tempFrom = new float[4];
     private final float[] tempTo = new float[4];
+    private BufferedImage contentImage;
 
     public Demo() {
         super("FastProportion Demo");
@@ -84,6 +85,16 @@ public class Demo extends JFrame {
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setLocationRelativeTo(null);
         this.setBackground(COLOR_BG);
+
+        try {
+            contentImage = javax.imageio.ImageIO.read(Demo.class.getResourceAsStream("/image.png"));
+            if (contentImage != null) {
+                p.contentWidth = contentImage.getWidth();
+                p.contentHeight = contentImage.getHeight();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         // Setup Icon
         BufferedImage icon = new BufferedImage(ICON_SIZE, ICON_SIZE, BufferedImage.TYPE_INT_ARGB);
@@ -128,11 +139,18 @@ public class Demo extends JFrame {
             public void onRender(Graphics2D g) {
                 int ax = (int)getAbsoluteX(), ay = (int)getAbsoluteY();
                 int w = (int)getWidth(), h = (int)getHeight();
-                g.setColor(COLOR_CONTENT_BG);
-                g.fillRect(ax, ay, w, h);
-                g.setColor(COLOR_CONTENT_LINES);
-                g.drawLine(ax, ay, ax + w, ay + h);
-                g.drawLine(ax + w, ay, ax, ay + h);
+                
+                if (contentImage != null) {
+                    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                    g.drawImage(contentImage, ax, ay, w, h, null);
+                } else {
+                    g.setColor(COLOR_CONTENT_BG);
+                    g.fillRect(ax, ay, w, h);
+                    g.setColor(COLOR_CONTENT_LINES);
+                    g.drawLine(ax, ay, ax + w, ay + h);
+                    g.drawLine(ax + w, ay, ax, ay + h);
+                }
             }
         };
 
