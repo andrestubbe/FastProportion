@@ -77,22 +77,60 @@ public class Example {
 
 ---
 
-## Performance
+## ⚡ Zero‑Allocation API
 
-**FastProportion** computes layouts incredibly fast thanks to its pure float pipeline and lack of object allocations in the hotpath beyond the single array return.
+FastProportion provides two compute methods:
 
-### JMH Benchmark Results
+1. **Standard API** (allocates a new `float[4]`)
+```java
+float[] result = p.compute(ProportionMode.CONTAIN);
+```
 
-*Measured on Windows, JDK 25.0.1. Benchmark measures throughput (operations per millisecond).*
+2. **Zero‑Allocation API** (recommended for real‑time UIs)
+```java
+float[] out = new float[4];
+p.compute(ProportionMode.CONTAIN, out);
+```
+The zero‑allocation version avoids creating new arrays and is ideal for:
+- animation systems
+- layout engines
+- high‑FPS rendering
+- GPU upload pipelines
+- FastUI / FastGrid / FastOverlay
 
-| Mode | Average Time (ns/op) | Ops per Second |
-|---|---|---|
-| `CONTAIN` | ~6.5 ns/op | ~150 Million |
-| `COVER` | ~6.5 ns/op | ~150 Million |
+---
 
-To run the benchmarks locally, execute `run-benchmark.bat` in the root directory.
+## 🚀 Performance (JMH, JDK 25)
 
-> **Note:** These numbers reflect the zero-allocation `compute(mode, float[] out)` API which eliminates GC pressure entirely during rendering loops.
+Using the zero‑allocation API:
+
+| Benchmark Code | Average Time (ns/op) |
+|---|---|
+| `computeContainZeroAllocation` | ≈ 6.5 ns/op |
+| `computeCoverZeroAllocation` | ≈ 6.4 ns/op |
+
+This corresponds to:
+👉 **~150 million `compute()` calls per second**
+
+Measured with:
+- JDK 25
+- JMH 1.37
+- 3 forks × 10 iterations
+- AverageTime mode (ns/op)
+- Blackhole compiler mode
+
+FastProportion is effectively free in any real‑time rendering pipeline.
+
+### 📊 Benchmark Code (included in `/examples/Benchmark`)
+```java
+@Benchmark
+@CompilerControl(CompilerControl.Mode.DONT_INLINE)
+public float computeContainZeroAllocation() {
+    proportion.compute(ProportionMode.CONTAIN, out);
+    return out[0]; // force JIT to keep the computation
+}
+```
+This measures the pure math path without allocations, matching real‑world usage in FastUI and FastGrid.
 
 ---
 

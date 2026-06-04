@@ -24,14 +24,18 @@ public class JMH_Proportion {
     }
 
     @Benchmark
-    public void computeContainZeroAllocation() {
+    @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+    public float computeContainZeroAllocation() {
         // Measures the zero-allocation throughput for CONTAIN mode
         proportion.compute(ProportionMode.CONTAIN, out);
+        return out[0]; // force JIT to keep the computation
     }
 
     @Benchmark
-    public void computeCoverZeroAllocation() {
+    @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+    public float computeCoverZeroAllocation() {
         // Measures the zero-allocation throughput for COVER mode
         proportion.compute(ProportionMode.COVER, out);
+        return out[0]; // force JIT to keep the computation
     }
 }

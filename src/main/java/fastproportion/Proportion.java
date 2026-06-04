@@ -17,23 +17,10 @@ public final class Proportion {
         this.contentHeight = contentHeight;
     }
 
-    /**
-     * @return [scaledX, scaledY, scaledWidth, scaledHeight]
-     */
     public float[] compute(ProportionMode mode) {
-        float scale;
-
-        switch (mode) {
-            case FIT_HORIZONTAL -> scale = width / contentWidth;
-            case FIT_VERTICAL -> scale = height / contentHeight;
-            case CONTAIN -> scale = Math.min(width / contentWidth, height / contentHeight);
-            case COVER -> scale = Math.max(width / contentWidth, height / contentHeight);
-            default -> scale = 1.0f;
-        }
-
+        float scale = computeScale(mode);
         float scaledWidth = contentWidth * scale;
         float scaledHeight = contentHeight * scale;
-
         float scaledX = x + (width - scaledWidth) * 0.5f;
         float scaledY = y + (height - scaledHeight) * 0.5f;
 
@@ -47,16 +34,7 @@ public final class Proportion {
      * @param out  A float array of at least length 4. Will be populated with [x, y, width, height]
      */
     public void compute(ProportionMode mode, float[] out) {
-        float scale;
-
-        switch (mode) {
-            case FIT_HORIZONTAL -> scale = width / contentWidth;
-            case FIT_VERTICAL -> scale = height / contentHeight;
-            case CONTAIN -> scale = Math.min(width / contentWidth, height / contentHeight);
-            case COVER -> scale = Math.max(width / contentWidth, height / contentHeight);
-            default -> scale = 1.0f;
-        }
-
+        float scale = computeScale(mode);
         float scaledWidth = contentWidth * scale;
         float scaledHeight = contentHeight * scale;
 
@@ -64,6 +42,16 @@ public final class Proportion {
         out[1] = y + (height - scaledHeight) * 0.5f;
         out[2] = scaledWidth;
         out[3] = scaledHeight;
+    }
+
+    private float computeScale(ProportionMode mode) {
+        switch (mode) {
+            case FIT_HORIZONTAL: return width / contentWidth;
+            case FIT_VERTICAL: return height / contentHeight;
+            case CONTAIN: return Math.min(width / contentWidth, height / contentHeight);
+            case COVER: return Math.max(width / contentWidth, height / contentHeight);
+            default: return 1.0f; // Compiler-required fallback
+        }
     }
 }
 
