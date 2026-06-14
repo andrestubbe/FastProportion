@@ -1,4 +1,4 @@
-# FastProportion 0.1.0 [ALPHA-2026-06] — � — Aspect-Ratio Scaling for Java
+# FastProportion 0.1.0 [ALPHA] — Aspect-Ratio Scaling for Java
 
 [![Status](https://img.shields.io/badge/status-0.1.0-brightgreen.svg)](https://github.com/andrestubbe/fastproportion/releases/tag/0.1.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
