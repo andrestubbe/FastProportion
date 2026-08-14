@@ -17,6 +17,34 @@
 
 ---
 
+## Quick Start
+
+```java
+import fastproportion.Proportion;
+import fastproportion.ProportionMode;
+
+public class Example {
+    public static void main(String[] args) {
+        // Container: 500×500, Content: 1920×1080
+        Proportion p = new Proportion(500, 500, 1920, 1080);
+
+        // Calculate the bounding box for CONTAIN mode
+        float[] bounds = p.compute(ProportionMode.CONTAIN);
+
+        float x = bounds[0];
+        float y = bounds[1];
+        float w = bounds[2];
+        float h = bounds[3];
+
+        System.out.printf("Draw at: x=%.1f, y=%.1f, w=%.1f, h=%.1f%n", x, y, w, h);
+    }
+}
+```
+
+---
+
+---
+
 ## Table of Contents
 
 - [Why FastProportion?](#why-fastproportion)
@@ -45,31 +73,6 @@ Standard Java layout approaches — `GridBagLayout`, manual `Math.min`/`Math.max
 
 ---
 
-## Quick Start
-
-```java
-import fastproportion.Proportion;
-import fastproportion.ProportionMode;
-
-public class Example {
-    public static void main(String[] args) {
-        // Container: 500×500, Content: 1920×1080
-        Proportion p = new Proportion(500, 500, 1920, 1080);
-
-        // Calculate the bounding box for CONTAIN mode
-        float[] bounds = p.compute(ProportionMode.CONTAIN);
-
-        float x = bounds[0];
-        float y = bounds[1];
-        float w = bounds[2];
-        float h = bounds[3];
-
-        System.out.printf("Draw at: x=%.1f, y=%.1f, w=%.1f, h=%.1f%n", x, y, w, h);
-    }
-}
-```
-
----
 
 ## Features
 
