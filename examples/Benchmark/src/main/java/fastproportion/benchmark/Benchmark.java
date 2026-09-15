@@ -6,36 +6,33 @@ import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Warmup(iterations = 5, time = 1)
-@Measurement(iterations = 10, time = 1)
-@Fork(3)
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 2, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
+@Fork(1)
 @State(Scope.Thread)
-public class JMH_Proportion {
+public class Benchmark {
 
     private Proportion proportion;
     private final float[] out = new float[4];
 
     @Setup(Level.Iteration)
     public void setup() {
-        // Create it once per thread to avoid allocation overhead during measurement
         proportion = new Proportion(500, 500, 1920, 1080);
     }
 
-    @Benchmark
+    @org.openjdk.jmh.annotations.Benchmark
     @CompilerControl(CompilerControl.Mode.DONT_INLINE)
     public float computeContainZeroAllocation() {
-        // Measures the zero-allocation throughput for CONTAIN mode
         proportion.compute(ProportionMode.CONTAIN, out);
-        return out[0]; // force JIT to keep the computation
+        return out[0];
     }
 
-    @Benchmark
+    @org.openjdk.jmh.annotations.Benchmark
     @CompilerControl(CompilerControl.Mode.DONT_INLINE)
     public float computeCoverZeroAllocation() {
-        // Measures the zero-allocation throughput for COVER mode
         proportion.compute(ProportionMode.COVER, out);
-        return out[0]; // force JIT to keep the computation
+        return out[0];
     }
 }
